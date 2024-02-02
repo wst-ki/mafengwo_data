@@ -6,6 +6,7 @@ import logging
 from bs4 import BeautifulSoup
 import time
 import requests
+import pandas as pd
 from functions.function_02_md5_getCityPOIList import _md5
 REQ = requests.session()
 # 获取一个城市的POI和对应的编号
@@ -13,6 +14,8 @@ def _get_route( mdd_id):
     '''
     获取景点信息
     '''
+
+
     results = []
     # 获取景点有多少页，防止少于20页
     post_data = _md5({
@@ -32,7 +35,7 @@ def _get_route( mdd_id):
     soup_page = BeautifulSoup(page_data, "html.parser")
     page = int(soup_page.find('span', class_='count').find('span').text)
     # 没法突破20页的限制，每个城市最多只能获取300个POI
-    for page in range(1,page):
+    for page in range(1,page+1):
         post_data = _md5({
             'sAct': 'KMdd_StructWebAjax|GetPoisByTag',
             'iMddid': mdd_id,
@@ -57,15 +60,14 @@ def _get_route( mdd_id):
             name = route['title']
             image = route.find('img')['src'].split('?')[0]
             results.append({
-                'mdd_id':mdd_id,
                 'poi_id': int(route_id[0]),
                 'name': name,
                 'image': image,
                 'link': 'http://www.mafengwo.cn' + link,
             })
 
-
+        df = pd.DataFrame(results)
 
         # 返回当前页列表数据和总页数
-    return results
+    return results,df
 
