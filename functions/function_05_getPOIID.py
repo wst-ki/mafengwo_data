@@ -57,6 +57,7 @@ def _get_route( mdd_id):
             name = route['title']
             image = route.find('img')['src'].split('?')[0]
             results.append({
+                'mdd_id':mdd_id,
                 'poi_id': int(route_id[0]),
                 'name': name,
                 'image': image,
