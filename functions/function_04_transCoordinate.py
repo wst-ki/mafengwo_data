@@ -128,7 +128,7 @@ class From_bd09_to_wgs84:
 
 # 使用腾讯地图进行地理编码查询
 def tx_geoCoordinate(addr):
-    with open(r'..\tx_key.txt','r',encoding='utf-8') as file:
+    with open(r'E:\pycharm\keys\tx_key.txt','r',encoding='utf-8') as file:
         key = file.read()
     #查询addr的经纬度
     template = f'https://apis.map.qq.com/jsapi?qt=geoc&addr={addr}&key={key}=jsonp&pf=jsapi&ref=jsapi&cb=qq.maps._svcb2.geocoder0'
@@ -141,7 +141,7 @@ def tx_geoCoordinate(addr):
 
 # 备用，用百度地图获取地理编码
 def bd_geoCoordinate(addr):
-    with open(r'..\bd_key.txt','r',encoding='utf-8') as file:
+    with open(r'E:\pycharm\keys\bd_key.txt','r',encoding='utf-8') as file:
         key = file.read()
     ua = UserAgent()
 
