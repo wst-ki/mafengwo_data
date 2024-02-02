@@ -57,3 +57,5 @@ def check_and_create_database(db_name = "Mafengwo"):
 
 # 检查并创建数据库
 check_and_create_database()
+
+# 建立一个表格，用于装载所有城市的POI数据

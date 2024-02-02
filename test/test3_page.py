@@ -2,9 +2,7 @@
 # 开发时间17:16,2024/2/1
 # name:test3_page
 import re
-import logging
 from bs4 import BeautifulSoup
-import time
 import requests
 from functions.function_02_md5_getCityPOIList import _md5
 REQ = requests.session()
@@ -13,7 +11,7 @@ import time
 import hashlib
 import json
 import requests
-
+import pandas as pd
 
 HEADERS = headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -90,7 +88,7 @@ def _get_route( mdd_id):
     soup_page = BeautifulSoup(page_data, "html.parser")
     page = int(soup_page.find('span', class_='count').find('span').text)
     # 没法突破20页的限制，每个城市最多只能获取300个POI
-    for page in range(1,page):
+    for page in range(1,page+1):
         post_data = _md5({
             'sAct': 'KMdd_StructWebAjax|GetPoisByTag',
             'iMddid': mdd_id,
@@ -121,10 +119,12 @@ def _get_route( mdd_id):
                 'link': 'http://www.mafengwo.cn' + link,
             })
 
-
+        df = pd.DataFrame(results)
 
         # 返回当前页列表数据和总页数
-    return results
-results = _get_route( mdd_id=10065)
+    return results,df
+results,df = _get_route( mdd_id=10065)
+df.to_csv("test.csv")
 print(results)
+print(df)
 print(len(results))
