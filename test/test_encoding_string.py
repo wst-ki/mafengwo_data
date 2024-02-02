@@ -6,7 +6,6 @@ import requests
 import json
 import time
 import hashlib
-print("test")
 # 通用 Headers
 HEADERS = headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
