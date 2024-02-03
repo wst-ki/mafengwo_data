@@ -2,12 +2,16 @@
 # 开发时间11:55,2024/2/2
 # name:function_05_getPOIID
 import re
-import logging
 from bs4 import BeautifulSoup
-import time
 import requests
 import pandas as pd
 from functions.function_02_md5_getCityPOIList import _md5
+HEADERS = headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/75.0.3770.142 Safari/537.36'
+}
+REQ = requests.session()
+REQ.headers=HEADERS
 REQ = requests.session()
 # 获取一个城市的POI和对应的编号
 def _get_route( mdd_id):
@@ -69,5 +73,5 @@ def _get_route( mdd_id):
         df = pd.DataFrame(results)
 
         # 返回当前页列表数据和总页数
-    return results,df
+        return results,df
 

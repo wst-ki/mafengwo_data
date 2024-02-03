@@ -4,12 +4,12 @@
 # 这是整个程序的第一步，先要登陆马蜂窝账号才能进行这步,是一个函数，函数不需要输入，但是会输出一个唯一值encrypted_string
 import requests
 import re
-
+import certifi
 def _get_md5_encrypted_string(REQ):
 
     # 以北京景点为例，首先获取加密 js 文件的地址
-    url = 'http://www.mafengwo.cn/jd/10065/gonglve.html'
-    r = REQ.get(url)
+    url = 'https://www.mafengwo.cn/jd/10065/gonglve.html'
+    r = REQ.get(url,verify=certifi.where())
 
     if r.status_code == 403:
         exit('访问被拒绝，请检查是否为IP地址被禁')
