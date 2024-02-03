@@ -8,30 +8,6 @@ from functions.function_06_getHTML import html_crawler
 from bs4 import BeautifulSoup
 from functions.function_07_getComment import crawler_comment
 # 先封装一个获取评论的函数
-def crawl_comments(html_content):
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    # 找到包含评论的ul元素
-    ul_element = soup.find('div', class_='rev-list').find('ul')
-
-    # 获取所有li元素
-    li_elements = ul_element.find_all('li')
-
-    # 遍历li元素，提取内容并存入字典
-    reviews_list = []
-    for li_element in li_elements:
-        # 添加条件判断，只处理class="rev-item comment-item clearfix"的li元素
-        if 'rev-item' in li_element.get('class', []) and 'comment-item' in li_element.get('class',
-                                                                                          []) and 'clearfix' in li_element.get(
-                'class', []):
-            user_name = li_element.find('a', class_='name').get_text(strip=True)
-            comment_text = li_element.find('p', class_='rev-txt').get_text(strip=True)
-            review_dict = {'name': user_name, 'comment': comment_text}
-            reviews_list.append(review_dict)
-
-    # 输出结果
-    return reviews_list
-
 
 # 以广州为例，获取广州的POI数据
 cityID_list = [10088]
