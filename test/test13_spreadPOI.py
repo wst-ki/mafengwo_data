@@ -11,7 +11,7 @@ from functions.function_07_getComment import crawler_comment
 
 # 以广州为例，获取广州的POI数据
 cityID_list = [10088]
-csv_path = f'../cache/{10088}.csv'
+csv_path = os.path.join('..','cache',f'{10088}.csv')
 if  not os.path.exists(csv_path):
     for cityID in cityID_list:
         _get_route(cityID)

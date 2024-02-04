@@ -22,7 +22,7 @@ REQ.headers=HEADERS
 encrypted_string = _get_md5_encrypted_string(REQ)
 
 
-def _get_route( mdd_id):
+def _get_route(mdd_id):
     '''
     获取景点信息
     '''

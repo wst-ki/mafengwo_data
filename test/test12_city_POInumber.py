@@ -9,7 +9,8 @@ import os
 
 #  提取城市数据
 # 检查CSV文件是否存在
-csv_file_path = '..\cache\cities_data.csv'
+csv_file_path = os.path.join('..', 'cache', 'cities_data.csv')
+
 if  os.path.exists(csv_file_path):
     print("城市数据已存在，无需再次提取。")
 

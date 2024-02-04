@@ -12,7 +12,6 @@ HEADERS = headers = {
 }
 REQ = requests.session()
 REQ.headers=HEADERS
-REQ = requests.session()
 # 获取一个城市的POI和对应的编号
 def _get_route( mdd_id):
     '''

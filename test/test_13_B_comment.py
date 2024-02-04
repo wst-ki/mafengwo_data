@@ -58,4 +58,5 @@ def crawler_comment(POI,page):
 
             return(reviews_list)
 
-crawler_comment(3474,5)
+c = crawler_comment(3474,5)
+print(c)
