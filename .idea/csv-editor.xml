@@ -24,6 +24,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\cache\10088.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\cache\25091.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\cache\443.csv">
           <value>
             <Attribute>
@@ -31,7 +45,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\cache\4432.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\cache\449.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\cache\cities_data.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\test\test.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
