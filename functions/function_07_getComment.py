@@ -54,7 +54,7 @@ def crawler_comment(POI, page):
                 if 'rev-item' in li_element.get('class', []) and 'comment-item' in li_element.get('class',
                                                                                                   []) and 'clearfix' in li_element.get(
                     'class', []):
-                    textarea_tag = soup.find('textarea',class_="comment_reply")
+                    textarea_tag = li_element.find('textarea',class_="comment_reply")
                     # 评论唯一id
                     data_comment_id = textarea_tag.get('data-comment_id')
                     # 用户名

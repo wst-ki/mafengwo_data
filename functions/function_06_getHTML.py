@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def html_crawler(url, max_retries=3):
+def html_crawler(url, max_retries=20):
     '''
     输入的是一个网址，输出是这个网页的源代码
     :param url:
