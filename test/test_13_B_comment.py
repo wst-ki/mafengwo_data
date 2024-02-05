@@ -52,8 +52,18 @@ def crawler_comment(POI,page):
                                                                                                   []) and 'clearfix' in li_element.get(
                     'class', []):
                     user_name = li_element.find('a', class_='name').get_text(strip=True)
+                    # 对景点的评分 <span class="s-star s-star5"></span>
+                    star_element = li_element.find('span', class_='s-star')
+                    star_number = int(star_element['class'][1][-1])
+                    # 评论者的唯一id
+                    user_id = li_element.find('a', class_='avatar')['href'].split('/')[-1].split('.')[0]
                     comment_text = li_element.find('p', class_='rev-txt').get_text(strip=True)
-                    review_dict = {'name': user_name, 'comment': comment_text}
+                    review_dict = {
+                                    'name': user_name,
+                                   'comment': comment_text,
+                                   'star': star_number,
+                                   'user_id': user_id
+                                   }
                     reviews_list.append(review_dict)
 
             return(reviews_list)

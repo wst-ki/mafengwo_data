@@ -55,13 +55,23 @@ def crawler_comment(POI, page):
                                                                                                   []) and 'clearfix' in li_element.get(
                     'class', []):
                     textarea_tag = soup.find('textarea',class_="comment_reply")
+                    # 评论唯一id
                     data_comment_id = textarea_tag.get('data-comment_id')
+                    # 用户名
                     user_name = li_element.find('a', class_='name').get_text(strip=True)
+                    star_element = li_element.find('span', class_='s-star')
+                    # 评分等级
+                    star_number = int(star_element['class'][1][-1])
+                    # 评论者的唯一id
+                    user_id = li_element.find('a', class_='avatar')['href'].split('/')[-1].split('.')[0]
+                    # 评论内容
                     comment_text = li_element.find('p', class_='rev-txt').get_text(strip=True)
                     review_dict = {
-                                    'name': user_name,
+                                    'user_name': user_name,
                                    'comment': comment_text,
-                                   'data_comment_id': data_comment_id
+                                   'data_comment_id': data_comment_id,
+                                   'star_number': star_number,
+                                   'user_id': user_id
                                    }
                     reviews_list.append(review_dict)
 

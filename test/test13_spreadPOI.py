@@ -27,7 +27,6 @@ link_col = link_col.dropna()
 for link in link_col:
 
     POI = df.loc[df['link'] == link, 'poi_id'].iloc[-1]
-
     html_content = html_crawler(link)
 
 
@@ -46,8 +45,6 @@ for link in link_col:
     address = mhd_div.find('p', class_='sub').get_text(strip=True)
 
     # 获取POI评论数量
-    # 找到包含评价数量的<span>标签
-    # 找到包含评价数量的<span>标签
     span_tag = soup.find('span', class_='count')
 
     # 提取评价数量
