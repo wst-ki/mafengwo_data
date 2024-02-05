@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def html_crawler(url, max_retries=20):
+def html_crawler(url, max_retries=3):
     '''
     输入的是一个网址，输出是这个网页的源代码
     :param url:
@@ -33,27 +33,26 @@ def html_crawler(url, max_retries=20):
     while retry_count < max_retries:
         try:
             # 在启动浏览器时加入配置
-            driver = webdriver.Chrome(options=ch_options)
+            with webdriver.Chrome(options=ch_options) as driver:
 
-            # 执行反爬虫手段
-            driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-                "source": """
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => undefined
-                    })
-                """
-            })
+                # 执行反爬虫手段
+                driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                    "source": """
+                            Object.defineProperty(navigator, 'webdriver', {
+                                get: () => undefined
+                            })
+                        """
+                })
 
-            driver.get(url)
+                driver.get(url)
 
-            # 使用显式等待等待元素出现（这里以页面标题为例）
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, "//title[contains(text(),'马蜂窝')]"))
-            )
+                # 使用显式等待等待元素出现（这里以页面标题为例）
+                WebDriverWait(driver, 10).until(
+                    EC.presence_of_element_located((By.XPATH, "//title[contains(text(),'马蜂窝')]"))
+                )
 
-            # 获取页面 HTML 内容
-            html_content = driver.page_source
-            driver.quit()
+                # 获取页面 HTML 内容
+                html_content = driver.page_source
 
             return html_content
 
@@ -63,8 +62,9 @@ def html_crawler(url, max_retries=20):
 
             # 可以在此处添加额外的等待时间或其他策略
             # 例如，您可能希望在重试之前等待几秒钟
-            driver.quit()
             continue
 
     print(f"无法加载页面，已达到最大重试次数")
-    return None
+    driver.quit()
+    return 'error,长期无法连接，已跳过'
+

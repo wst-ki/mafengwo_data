@@ -5,6 +5,7 @@
 from functions.function_06_getHTML import html_crawler
 import bs4 as bs
 id = 30755290
+
 url = f'https://www.mafengwo.cn/u/{id}/note.html'
 html_content = html_crawler(url)
 # 如果没有游记就跳过这个用户
@@ -50,12 +51,20 @@ if int(travelogue_count)>0:
             # 如果编号不在集合中，添加到集合并进行处理
             seen_article_ids.add(article_id)
     # 将每篇游记都下载下来
+    articles = []
     for id in  seen_article_ids:
         # test cache E:\pycharm\mafengwo_data\cache\test.html https://www.mafengwo.cn/i/{int(id)}.html
-        article_url = f'https://www.mafengwo.cn/i/{int(id)}.html'
+        try:
+            id = int(id)
+            article_url = f'https://www.mafengwo.cn/i/{int(id)}.html'
+        except:
+            continue
         article_html_content = html_crawler(article_url)
+        # 如果长期获取不到就跳过吧
+        if  article_html_content == 'error,长期无法连接，已跳过':
+            continue
         article_soup =  bs.BeautifulSoup(article_html_content, 'html.parser')
-        articles = []
+
         try:
             print("默认有头图")
             # 获取文章标题
@@ -81,10 +90,15 @@ if int(travelogue_count)>0:
             article_text = []
             for paragraph in article_texts:
                 paragraph_text = paragraph.get_text(strip=True)
-                print(paragraph_text)
                 article_text.append(paragraph_text)
             article = ' '.join(article_text)
-            articles.append(article)
+            article_info = {
+                'title': title_text,
+                'travel_info': travel_info,
+                'article': article,
+                'article_id': id
+            }
+            articles.append(article_info)
         except:
             print("无头图测试")
             title_text = article_soup.select('.post_title.clearfix')[0].find('h1').get_text(strip=True)
@@ -117,12 +131,10 @@ if int(travelogue_count)>0:
             articles.append(article_info)
     user_info = {
         'username': username,
+        'gender':gender,
         # todo 记得后面改掉
         'user_id':None,
         'articles': articles
-
-
-
     }
     print(user_info)
 else:
