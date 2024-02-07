@@ -132,7 +132,7 @@ if int(travelogue_count)>0:
     user_info = {
         'username': username,
         'gender':gender,
-        # todo 记得后面改掉
+        #  记得后面改掉
         'user_id':None,
         'articles': articles
     }

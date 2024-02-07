@@ -9,7 +9,7 @@ from functions.function_06_getHTML import html_crawler
 from bs4 import BeautifulSoup
 from functions.function_07_getComment import crawler_comment
 
-# todo 后面要改成从数据库获取数据 先将评论返回到csv中
+# todo 后面要改成从数据库获取数据 先将评论返回到csv中,注意现在这个函数已经能够返回POI的地址了，需要进行地理编码
 def get_mdd_POIcomment(cityID_list,csv_path):
     """
     获取一个城市中所有景点的评论
@@ -61,3 +61,18 @@ def get_mdd_POIcomment(cityID_list,csv_path):
         comment_df = pd.DataFrame(comments)
         comment_df.to_csv(os.path.join('..','cache',f'{POI}.csv'), index=False)
         print(f'{POI}.csv 已保存')
+        """
+        {
+        POIname
+        summery
+        city_id
+        city_name
+        POI_id
+        POI_link
+        POI_address
+        address对应的经纬度
+        POI_comment_count
+        commentPage    
+        comment_df:user_name,comment,data_comment_id,star_number,user_id
+        }
+        """

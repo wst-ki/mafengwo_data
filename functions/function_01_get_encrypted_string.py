@@ -6,7 +6,11 @@ import requests
 import re
 import certifi
 def _get_md5_encrypted_string(REQ):
-
+    """
+    获取加密字符串
+    :param REQ:
+    :return: 加密字符串
+    """
     # 以北京景点为例，首先获取加密 js 文件的地址
     url = 'https://www.mafengwo.cn/jd/10065/gonglve.html'
     r = REQ.get(url,verify=certifi.where())

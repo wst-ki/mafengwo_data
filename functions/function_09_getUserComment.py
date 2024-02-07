@@ -7,6 +7,7 @@ import bs4 as bs
 
 
 def getUserComment(id):
+    # todo 后面在使用的时候需要加入一个判断，id是否已经在数据库中，如果有就不重复爬取
     """
     获取用户评论
     :param id: 输入的是每个用户的id
@@ -137,8 +138,7 @@ def getUserComment(id):
         user_info = {
             'username': username,
             'gender': gender,
-            # todo 记得后面改掉
-            'user_id': None,
+            'user_id': id,
             'articles': articles
         }
         print(user_info)
