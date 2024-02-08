@@ -2,6 +2,8 @@
 # 开发时间19:10,2024/2/5
 # name:function_09_getUserComment
 # 以用户为主题获取每个用户的评论
+import pymongo
+
 from functions.function_06_getHTML import html_crawler
 import bs4 as bs
 
@@ -142,6 +144,31 @@ def getUserComment(id):
             'articles': articles
         }
         print(user_info)
+
+        # 构建 MongoDB 连接
+        client = pymongo.MongoClient("mongodb://localhost:27017/")  # 请根据实际情况修改连接字符串
+
+        # 选择或创建数据库
+        db = client["地途"]  # 请将 client中的 " " 替换为你的数据库名称，此处称为"地途"
+
+        # 选择或创建集合（表）
+        collection = db["user_comments"]
+
+        # 构建要插入的文档（用户信息和游记信息）
+        document = {
+            'username': user_info["username"],
+            'gender': user_info["gender"],
+            'user_id': user_info["user_id"],
+            'articles': user_info["articles"]
+        }
+
+        # 插入文档到集合中
+        result = collection.insert_one(document)
+
+        # 打印插入成功的文档ID
+        print(f'Document ID: {result.inserted_id}已被插入')
+
+        # 返回用户信息
         return user_info
     else:
         print("该用户没有游记，已经跳过该用户")
