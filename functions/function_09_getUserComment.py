@@ -6,14 +6,14 @@ from functions.function_06_getHTML import html_crawler
 import bs4 as bs
 
 
-def getUserComment(id):
+def getUserComment(user_id):
     # todo 后面在使用的时候需要加入一个判断，id是否已经在数据库中，如果有就不重复爬取
     """
     获取用户评论
     :param id: 输入的是每个用户的id
     :return: 返回用户的评论信息、性别（如果有）、现居地
     """
-    url = f'https://www.mafengwo.cn/u/{id}/note.html'
+    url = f'https://www.mafengwo.cn/u/{user_id}/note.html'
     html_content = html_crawler(url)
     # 如果没有游记就跳过这个用户
     # 如果有游记就看看能不能获得所有游记的链接
@@ -27,7 +27,7 @@ def getUserComment(id):
     print("游记数量:", travelogue_count)
     if int(travelogue_count) > 0:
         # 提取用户名
-        info = html_crawler(f'https://www.mafengwo.cn/u/{id}.html')
+        info = html_crawler(f'https://www.mafengwo.cn/u/{user_id}.html')
         info_soup = bs.BeautifulSoup(info, 'html.parser')
         username = info_soup.find('div', class_='MAvaName').get_text(strip=True)
         # 提取这个用户的信息，比如性别和居住地
@@ -78,17 +78,24 @@ def getUserComment(id):
                 title_text = article_soup.find('div', class_='vi_con').find('h1').get_text(strip=True)
 
                 # 获取旅程相关信息
+                # 使用try except
                 # travel_info_div = soup.find_all('div', class_=["tarvel_dir_list", "clearfix"])
-                travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
 
-                if travel_info_div:
-                    ul = travel_info_div.find('ul')
-                    if ul:
-                        for li in ul.find_all('li'):
-                            key = li.get_text(strip=True).split('／')[0].split('/')[0]
-                            value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
-                                li.get_text(strip=True).split('／')[0]) != 0 else None
-                            travel_info[key] = value
+                try:
+                    travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
+
+                    if travel_info_div:
+                        ul = travel_info_div.find('ul')
+                        if ul:
+                            for li in ul.find_all('li'):
+                                key = li.get_text(strip=True).split('／')[0].split('/')[0]
+                                value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
+                                    li.get_text(strip=True).split('／')[0]) != 0 else None
+                                travel_info[key] = value
+                except:
+                    travel_info_div = None
+
+
                 # 获取文章内容
                 article_content = article_soup.find('div', class_='_j_content_box')
                 article_texts = article_content.find_all('p')
@@ -110,15 +117,19 @@ def getUserComment(id):
                 title_text = article_soup.select('.post_title.clearfix')[0].find('h1').get_text(strip=True)
                 travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
 
-                if travel_info_div:
-                    ul = travel_info_div.find('ul')
-                    if ul:
-                        travel_info = {}
-                        for li in ul.find_all('li'):
-                            key = li.get_text(strip=True).split('／')[0].split('/')[0]
-                            value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
-                                li.get_text(strip=True).split('／')[0]) != 0 else None
-                            travel_info[key] = value
+                try:
+                    travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
+
+                    if travel_info_div:
+                        ul = travel_info_div.find('ul')
+                        if ul:
+                            for li in ul.find_all('li'):
+                                key = li.get_text(strip=True).split('／')[0].split('/')[0]
+                                value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
+                                    li.get_text(strip=True).split('／')[0]) != 0 else None
+                                travel_info[key] = value
+                except:
+                    travel_info_div = None
                 # 获取文章内容
                 article_content = article_soup.select('.a_con_text.cont')[0]
                 article_texts = article_content.find_all('p')
@@ -138,7 +149,7 @@ def getUserComment(id):
         user_info = {
             'username': username,
             'gender': gender,
-            'user_id': id,
+            'user_id': user_id,
             'articles': articles
         }
         print(user_info)
