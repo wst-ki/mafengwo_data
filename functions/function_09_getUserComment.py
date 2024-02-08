@@ -15,6 +15,9 @@ def getUserComment(id):
     :param id: 输入的是每个用户的id
     :return: 返回用户的评论信息、性别（如果有）、现居地
     """
+    # 与article_id 区分
+    user_id = id
+
     url = f'https://www.mafengwo.cn/u/{id}/note.html'
     html_content = html_crawler(url)
     # 如果没有游记就跳过这个用户
@@ -104,7 +107,7 @@ def getUserComment(id):
                     'title': title_text,
                     'travel_info': travel_info,
                     'article': article,
-                    'article_id': id
+                    'article_id': article_id
                 }
                 articles.append(article_info)
             except:
@@ -134,13 +137,13 @@ def getUserComment(id):
                     'title': title_text,
                     'travel_info': travel_info,
                     'article': article,
-                    'article_id': id
+                    'article_id': article_id
                 }
                 articles.append(article_info)
         user_info = {
             'username': username,
             'gender': gender,
-            'user_id': id,
+            'user_id': user_id,
             'articles': articles
         }
         print(user_info)
