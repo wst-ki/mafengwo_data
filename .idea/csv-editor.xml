@@ -52,6 +52,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\cache\469.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\cache\cities_data.csv">
           <value>
             <Attribute>

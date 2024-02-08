@@ -2,23 +2,18 @@
 # 开发时间19:10,2024/2/5
 # name:function_09_getUserComment
 # 以用户为主题获取每个用户的评论
-import pymongo
-
 from functions.function_06_getHTML import html_crawler
 import bs4 as bs
 
 
-def getUserComment(id):
+def getUserComment(user_id):
     # todo 后面在使用的时候需要加入一个判断，id是否已经在数据库中，如果有就不重复爬取
     """
     获取用户评论
     :param id: 输入的是每个用户的id
     :return: 返回用户的评论信息、性别（如果有）、现居地
     """
-    # 与article_id 区分
-    user_id = id
-
-    url = f'https://www.mafengwo.cn/u/{id}/note.html'
+    url = f'https://www.mafengwo.cn/u/{user_id}/note.html'
     html_content = html_crawler(url)
     # 如果没有游记就跳过这个用户
     # 如果有游记就看看能不能获得所有游记的链接
@@ -32,7 +27,7 @@ def getUserComment(id):
     print("游记数量:", travelogue_count)
     if int(travelogue_count) > 0:
         # 提取用户名
-        info = html_crawler(f'https://www.mafengwo.cn/u/{id}.html')
+        info = html_crawler(f'https://www.mafengwo.cn/u/{user_id}.html')
         info_soup = bs.BeautifulSoup(info, 'html.parser')
         username = info_soup.find('div', class_='MAvaName').get_text(strip=True)
         # 提取这个用户的信息，比如性别和居住地
@@ -83,17 +78,24 @@ def getUserComment(id):
                 title_text = article_soup.find('div', class_='vi_con').find('h1').get_text(strip=True)
 
                 # 获取旅程相关信息
+                # 使用try except
                 # travel_info_div = soup.find_all('div', class_=["tarvel_dir_list", "clearfix"])
-                travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
 
-                if travel_info_div:
-                    ul = travel_info_div.find('ul')
-                    if ul:
-                        for li in ul.find_all('li'):
-                            key = li.get_text(strip=True).split('／')[0].split('/')[0]
-                            value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
-                                li.get_text(strip=True).split('／')[0]) != 0 else None
-                            travel_info[key] = value
+                try:
+                    travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
+
+                    if travel_info_div:
+                        ul = travel_info_div.find('ul')
+                        if ul:
+                            for li in ul.find_all('li'):
+                                key = li.get_text(strip=True).split('／')[0].split('/')[0]
+                                value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
+                                    li.get_text(strip=True).split('／')[0]) != 0 else None
+                                travel_info[key] = value
+                except:
+                    travel_info_div = None
+
+
                 # 获取文章内容
                 article_content = article_soup.find('div', class_='_j_content_box')
                 article_texts = article_content.find_all('p')
@@ -107,7 +109,7 @@ def getUserComment(id):
                     'title': title_text,
                     'travel_info': travel_info,
                     'article': article,
-                    'article_id': article_id
+                    'article_id': id
                 }
                 articles.append(article_info)
             except:
@@ -115,15 +117,19 @@ def getUserComment(id):
                 title_text = article_soup.select('.post_title.clearfix')[0].find('h1').get_text(strip=True)
                 travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
 
-                if travel_info_div:
-                    ul = travel_info_div.find('ul')
-                    if ul:
-                        travel_info = {}
-                        for li in ul.find_all('li'):
-                            key = li.get_text(strip=True).split('／')[0].split('/')[0]
-                            value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
-                                li.get_text(strip=True).split('／')[0]) != 0 else None
-                            travel_info[key] = value
+                try:
+                    travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
+
+                    if travel_info_div:
+                        ul = travel_info_div.find('ul')
+                        if ul:
+                            for li in ul.find_all('li'):
+                                key = li.get_text(strip=True).split('／')[0].split('/')[0]
+                                value = li.get_text(strip=True).split('／')[0].split('/')[1] if len(
+                                    li.get_text(strip=True).split('／')[0]) != 0 else None
+                                travel_info[key] = value
+                except:
+                    travel_info_div = None
                 # 获取文章内容
                 article_content = article_soup.select('.a_con_text.cont')[0]
                 article_texts = article_content.find_all('p')
@@ -137,7 +143,7 @@ def getUserComment(id):
                     'title': title_text,
                     'travel_info': travel_info,
                     'article': article,
-                    'article_id': article_id
+                    'article_id': id
                 }
                 articles.append(article_info)
         user_info = {
@@ -147,31 +153,6 @@ def getUserComment(id):
             'articles': articles
         }
         print(user_info)
-
-        # 构建 MongoDB 连接
-        client = pymongo.MongoClient("mongodb://localhost:27017/")  # 请根据实际情况修改连接字符串
-
-        # 选择或创建数据库
-        db = client["地途"]  # 请将 client中的 " " 替换为你的数据库名称，此处称为"地途"
-
-        # 选择或创建集合（表）
-        collection = db["user_comments"]
-
-        # 构建要插入的文档（用户信息和游记信息）
-        document = {
-            'username': user_info["username"],
-            'gender': user_info["gender"],
-            'user_id': user_info["user_id"],
-            'articles': user_info["articles"]
-        }
-
-        # 插入文档到集合中
-        result = collection.insert_one(document)
-
-        # 打印插入成功的文档ID
-        print(f'Document ID: {result.inserted_id}已被插入')
-
-        # 返回用户信息
         return user_info
     else:
         print("该用户没有游记，已经跳过该用户")
