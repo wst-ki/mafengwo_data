@@ -5,6 +5,8 @@
 import requests
 import re
 import certifi
+
+# 尝试版本管理
 def _get_md5_encrypted_string(REQ):
     """
     获取加密字符串
