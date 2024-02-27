@@ -15,7 +15,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
+# 模拟人类操作，节省性能，最重要
 def html_crawler(url, max_retries=3):
     '''
     输入的是一个网址，输出是这个网页的源代码
