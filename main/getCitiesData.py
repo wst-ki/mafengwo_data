@@ -22,3 +22,4 @@ getCitiesData_DB(my_mongo) # 若集合里面有数据，就会不爬了，重复
 # 爬取目的地信息(城市的POI信息)： 使用func05-getPOIID
 
 # todo 将上述爬取的对应城市信息用于爬取其前300个POI
+# 我测
