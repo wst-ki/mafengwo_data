@@ -1,6 +1,7 @@
 # builder:wstki
 # 开发时间10:37,2024/2/3
 # name:test13_spreadPOI
+from functions.function_04_getCitiesData import getCitiesData
 from functions.function_05_getPOIID import _get_route
 import pandas as pd
 import os
@@ -8,7 +9,8 @@ from functions.function_06_getHTML import html_crawler
 from bs4 import BeautifulSoup
 from functions.function_07_getComment import crawler_comment
 # 先封装一个获取评论的函数
-
+# 尝试获取全国的城市对应的id
+getCitiesData()
 # 以广州为例，获取广州的POI数据
 cityID_list = [10088]
 csv_path = os.path.join('..','cache',f'{10088}.csv')
