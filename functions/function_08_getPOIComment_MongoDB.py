@@ -19,8 +19,8 @@ from functions.function_07_getComment import crawler_comment
 
 def get_POIcomment_DB(cityID, mongo_instance):
     """
-    获取一个城市中所有景点POI及其评论
-    :param cityID: 从数据库中获取单个数据，是城市的对应id
+    获取一个城市中所有景点的评论
+    :param cityID_list: 从数据库中获取一列数据，是城市的对应id
     :param mongo_instance: 数据库实例
     :return: 内循环都会返回对应城市中一个景点的评论，外循环是城市
     """
