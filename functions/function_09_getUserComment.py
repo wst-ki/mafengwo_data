@@ -6,8 +6,8 @@ from functions.function_06_getHTML import html_crawler
 import bs4 as bs
 
 
+# todo 后面在使用的时候需要加入一个判断，id是否已经在数据库中，如果有就不重复爬取
 def getUserComment(user_id):
-    # todo 后面在使用的时候需要加入一个判断，id是否已经在数据库中，如果有就不重复爬取
     """
     获取用户评论
     :param id: 输入的是每个用户的id
@@ -94,7 +94,6 @@ def getUserComment(user_id):
                                 travel_info[key] = value
                 except:
                     travel_info_div = None
-
 
                 # 获取文章内容
                 article_content = article_soup.find('div', class_='_j_content_box')
