@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from functions.function_07_getComment import crawler_comment
 
 # todo 后面要改成从数据库获取数据 先将评论返回到csv中,注意现在这个函数已经能够返回POI的地址了，需要进行地理编码
+# todo 对于cityID_list需要添加一个判定，如果其中的某个POIid对应的评论数量为-1或者POI的id为none就跳过这个POI
 def get_mdd_POIcomment(cityID_list,csv_path):
     """
     获取一个城市中所有景点的评论
