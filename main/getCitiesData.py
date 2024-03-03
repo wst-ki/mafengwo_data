@@ -11,7 +11,8 @@
 '''
 将所有的城市ID、网址及其POI数量将会保存到数据库中
 保存的数据库名称为：地途
-保存的数据集名称为：cities_data
+保存城市数据的数据集合：cities_data
+保存城市对应POI的数据集合：{城市ID}_POIs
 '''
 from functions.class_01_mongodb import MongoDB
 from functions.function_04_getCitiesData_MongoDB import getCitiesData_DB
@@ -26,5 +27,5 @@ getCitiesData_DB(city_mongo)  # 若集合里面有数据，就会不爬了，重
 cityID_list = [10088]
 for cityID in cityID_list:
     cities_POIs_mongo = MongoDB(dataset='地途', collection=f'{cityID}_POIs')  # 新建或连接一个数据库实例
-    get_POIcomment_DB(cityID,cities_POIs_mongo)
+    get_POIcomment_DB(cityID, cities_POIs_mongo)
 
