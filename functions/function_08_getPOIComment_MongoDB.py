@@ -44,25 +44,41 @@ def get_POIcomment_DB(cityID, mongo_instance):
             soup = BeautifulSoup(html_content, 'html.parser')
 
             # 概况
-            summary = soup.find('div', class_='summary')
-            text_content = summary.get_text(strip=True) if summary else ""
+            try:
+                summary = soup.find('div', class_='summary')
+            except:
+                summary = ""
             # 提取文字内容，并去除换行符
-            text_content = summary.get_text(strip=True)
+            try:
+                text_content = summary.get_text(strip=True)
+            except:
+                text_content = ""
+
 
             # POI地址
             # 找到class为mhd的div元素
             mhd_div = soup.find('div', class_='mhd')
             # 找到p元素，并提取文本内容
-            address_elem = mhd_div.find('p', class_='sub')
-            address = address_elem.get_text(strip=True) if address_elem else ""
+            try:
+                address = mhd_div.find('p', class_='sub').get_text(strip=True)
+            except:
+                address = ""
             # 地理编码，添加POI对应的经纬度
-            coordination = tx_geoCoordinate(address) if address else ""
+            try:
+                coordination = tx_geoCoordinate(address)
+            except:
+                coordination = []
+
             # 获取POI评论数量
-            span_tag = soup.find('span', class_='count')
-            span_tag =span_tag.get_text(strip=True) if span_tag else ""
+            try:
+                span_tag = soup.find('span', class_='count')
+            except:
+                span_tag = ""
+
             # 提取评价数量
             # 评论的页数
             review_count_page = int(span_tag.span.get_text(strip=True))
+            nested_spans = span_tag.find_all('span')
             # 如果不存在，则执行插入操作
             # 构建文档，将评论数据添加到route_data中
             document = {
@@ -73,16 +89,7 @@ def get_POIcomment_DB(cityID, mongo_instance):
                 'address': address,
                 'coordination': coordination, # 添加了地理编码
             }
-            # 将None字段替换为空值
-            for key, value in document.items():
-                if value is None:
-                    if isinstance(value, str):
-                        document[key] = ""  # 空字符串
-                    elif isinstance(value, list):
-                        document[key] = []  # 空列表
-                    elif isinstance(value, dict):
-                        document[key] = {}  # 空字典
-                    # 可根据需要添加其他数据类型的处理
+
             # 将文档保存到MongoDB中
             mongo_instance.insert_one(document)
             print(f'编号为{POI}的景点保存成功')
