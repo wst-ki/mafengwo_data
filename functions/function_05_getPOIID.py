@@ -79,7 +79,7 @@ def _get_route(mdd_id):
                 'link': 'http://www.mafengwo.cn' + link,
             })
 
-        df = pd.DataFrame(results)
+    df = pd.DataFrame(results)
 
-        # 返回当前页列表数据和总页数
-        return results, df
+    # 返回当前页列表数据和总页数
+    return results, df

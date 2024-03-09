@@ -97,6 +97,14 @@ class MongoDB:
         """
         return self.collection.find(condition)
 
+    def find_one(self, condition=None):
+        """
+        使用find_one方法可以检索集合中符合条件的第一个文档。
+        :param condition:条件
+        :return:
+        """
+        return self.collection.find_one(condition)
+
     def find_big_data(self, condition=None):
         """
         查询大量数据
