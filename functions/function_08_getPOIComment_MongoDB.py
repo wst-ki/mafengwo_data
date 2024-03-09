@@ -73,7 +73,16 @@ def get_POIcomment_DB(cityID, mongo_instance):
                 'address': address,
                 'coordination': coordination, # 添加了地理编码
             }
-
+            # 将None字段替换为空值
+            for key, value in document.items():
+                if value is None:
+                    if isinstance(value, str):
+                        document[key] = ""  # 空字符串
+                    elif isinstance(value, list):
+                        document[key] = []  # 空列表
+                    elif isinstance(value, dict):
+                        document[key] = {}  # 空字典
+                    # 可根据需要添加其他数据类型的处理
             # 将文档保存到MongoDB中
             mongo_instance.insert_one(document)
             print(f'编号为{POI}的景点保存成功')
