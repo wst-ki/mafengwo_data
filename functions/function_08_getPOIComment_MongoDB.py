@@ -66,6 +66,7 @@ def get_POIcomment_DB(cityID, mongo_instance):
             # 如果不存在，则执行插入操作
             # 构建文档，将评论数据添加到route_data中
             document = {
+                'city_id':cityID,
                 'POI': POI,
                 'route_data': route_data.to_dict(),  # df转为字典
                 'comments': crawler_comment(POI, review_count_page),
