@@ -45,7 +45,7 @@ def get_POIcomment_DB(cityID, mongo_instance):
 
             # 概况
             summary = soup.find('div', class_='summary')
-
+            text_content = summary.get_text(strip=True) if summary else ""
             # 提取文字内容，并去除换行符
             text_content = summary.get_text(strip=True)
 
@@ -53,16 +53,16 @@ def get_POIcomment_DB(cityID, mongo_instance):
             # 找到class为mhd的div元素
             mhd_div = soup.find('div', class_='mhd')
             # 找到p元素，并提取文本内容
-            address = mhd_div.find('p', class_='sub').get_text(strip=True)
+            address_elem = mhd_div.find('p', class_='sub')
+            address = address_elem.get_text(strip=True) if address_elem else ""
             # 地理编码，添加POI对应的经纬度
-            coordination = tx_geoCoordinate(address)
+            coordination = tx_geoCoordinate(address) if address else ""
             # 获取POI评论数量
             span_tag = soup.find('span', class_='count')
-
+            span_tag =span_tag.get_text(strip=True) if span_tag else ""
             # 提取评价数量
             # 评论的页数
             review_count_page = int(span_tag.span.get_text(strip=True))
-            nested_spans = span_tag.find_all('span')
             # 如果不存在，则执行插入操作
             # 构建文档，将评论数据添加到route_data中
             document = {
