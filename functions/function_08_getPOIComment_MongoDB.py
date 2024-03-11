@@ -77,15 +77,22 @@ def get_POIcomment_DB(cityID, mongo_instance):
 
             # 提取评价数量
             # 评论的页数
-            review_count_page = int(span_tag.span.get_text(strip=True))
-            nested_spans = span_tag.find_all('span')
+            try:
+                review_count_page = int(span_tag.span.get_text(strip=True))
+            except:
+                review_count_page = 1
+            # nested_spans = span_tag.find_all('span')
+            try:
+                comments = crawler_comment(POI, review_count_page)
+            except:
+                comments = {}
             # 如果不存在，则执行插入操作
             # 构建文档，将评论数据添加到route_data中
             document = {
                 'city_id':cityID,
                 'POI': POI,
                 'route_data': route_data.to_dict(),  # df转为字典
-                'comments': crawler_comment(POI, review_count_page),
+                'comments': comments,
                 'text_content': text_content,
                 'address': address,
                 'coordination': coordination, # 添加了地理编码
