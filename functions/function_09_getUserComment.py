@@ -13,6 +13,7 @@ def getUserComment(user_id):
     :param id: 输入的是每个用户的id
     :return: 返回用户的评论信息、性别（如果有）、现居地
     """
+    print(f"用户id为:{user_id}")
     url = f'https://www.mafengwo.cn/u/{user_id}/note.html'
     html_content = html_crawler(url)
     # 如果没有游记就跳过这个用户

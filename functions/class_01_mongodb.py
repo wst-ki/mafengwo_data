@@ -89,21 +89,23 @@ class MongoDB:
         self.collection.create_index(field, unique=unique)
         print('index has been created')
 
-    def find(self, condition=None):
+    def find(self, condition=None, projection=None):
         """
         使用find方法可以检索集合中符合条件的文档。
         :param condition:条件
+        :param projection: 返回结果中包含或排除的字段
         :return:
         """
-        return self.collection.find(condition)
+        return self.collection.find(condition, projection)
 
-    def find_one(self, condition=None):
+    def find_one(self, condition=None, projection=None):
         """
-        使用find_one方法可以检索集合中符合条件的第一个文档。
-        :param condition:条件
+        使用find_one方法可以检索集合中符合条件的第一个文档
+        :param condition:条件(设置为空则查询全部)
+        :param projection: 返回结果中包含或排除的字段
         :return:
         """
-        return self.collection.find_one(condition)
+        return self.collection.find_one(condition, projection)
 
     def find_big_data(self, condition=None):
         """
