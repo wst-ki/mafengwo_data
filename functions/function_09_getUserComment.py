@@ -13,6 +13,7 @@ def getUserComment(user_id):
     :param id: 输入的是每个用户的id
     :return: 返回用户的评论信息、性别（如果有）、现居地
     """
+    print(f"用户id为:{user_id}")
     url = f'https://www.mafengwo.cn/u/{user_id}/note.html'
     html_content = html_crawler(url)
     # 如果没有游记就跳过这个用户
@@ -113,9 +114,11 @@ def getUserComment(user_id):
                 articles.append(article_info)
             except:
                 print("无头图测试")
-                title_text = article_soup.select('.post_title.clearfix')[0].find('h1').get_text(strip=True)
-                travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
-
+                try:
+                    title_text = article_soup.select('.post_title.clearfix')[0].find('h1').get_text(strip=True)
+                    travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
+                except:
+                    title_text = None
                 try:
                     travel_info_div = article_soup.select('.tarvel_dir_list.clearfix')[0]
 
@@ -130,21 +133,36 @@ def getUserComment(user_id):
                 except:
                     travel_info_div = None
                 # 获取文章内容
-                article_content = article_soup.select('.a_con_text.cont')[0]
-                article_texts = article_content.find_all('p')
-                # 建立空列表，存储每段文本
-                article_text = []
-                for paragraph in article_texts:
-                    paragraph_text = paragraph.get_text(strip=True)
-                    article_text.append(paragraph_text)
-                article = ' '.join(article_text)
-                article_info = {
-                    'title': title_text,
-                    'travel_info': travel_info,
-                    'article': article,
-                    'article_id': id
-                }
-                articles.append(article_info)
+                try:
+                    article_content = article_soup.select('.a_con_text.cont')[0]
+                except:
+                    article_content = None
+                try:
+                    article_texts = article_content.find_all('p')
+                    # 建立空列表，存储每段文本
+                    article_text = []
+                    for paragraph in article_texts:
+                        paragraph_text = paragraph.get_text(strip=True)
+                        article_text.append(paragraph_text)
+                    article = ' '.join(article_text)
+                    article_info = {
+                        'title': title_text,
+                        'travel_info': travel_info,
+                        'article': article,
+                        'article_id': id
+                    }
+                    articles.append(article_info)
+                except:
+                    article_texts = None
+                    article_info = {
+                        'title': title_text,
+                        'travel_info': travel_info,
+                        'article': None,
+                        'article_id': id
+                    }
+                    articles.append(article_info)
+
+
         user_info = {
             'username': username,
             'gender': gender,
