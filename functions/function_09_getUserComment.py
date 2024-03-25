@@ -54,7 +54,8 @@ def getUserComment(user_id):
                 class_value = gender_content.get('class')
                 gender_class = next((cls for cls in class_value if 'Gender' in cls), None)
                 gender = gender_class.replace('MGender', '')
-
+            else:
+                gender = None
         except:
             gender = None
         # 找到包含所有游记的元素
