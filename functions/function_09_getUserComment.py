@@ -39,10 +39,21 @@ def getUserComment(user_id):
             location = None
         # 提取性别
         try:
-            gender_content = info_soup.select('.MGenderFemale.mfw-acc-hide')[0]
-            class_value = gender_content.get('class')
-            gender_class = next((cls for cls in class_value if 'Gender' in cls), None)
-            gender = gender_class.replace('MGender', '')
+            gender_content_female = info_soup.select('.MGenderFemale.mfw-acc-hide')
+            gender_content_male = info_soup.select('.MGenderMale.mfw-acc-hide')
+
+            # 检查是否找到了 female 类的元素，如果找到了则取第一个元素
+            if gender_content_female:
+                gender_content = gender_content_female[0]
+                class_value = gender_content.get('class')
+                gender_class = next((cls for cls in class_value if 'Gender' in cls), None)
+                gender = gender_class.replace('MGender', '')
+            # 如果没有找到 female 类的元素，则尝试查找 male 类的元素，如果找到了则取第一个元素
+            elif gender_content_male:
+                gender_content = gender_content_male[0]
+                class_value = gender_content.get('class')
+                gender_class = next((cls for cls in class_value if 'Gender' in cls), None)
+                gender = gender_class.replace('MGender', '')
 
         except:
             gender = None
