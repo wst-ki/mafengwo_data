@@ -22,7 +22,10 @@ def getUserComment(user_id):
     # 找到包含游记的 div 元素
     div_for_travelogue = soup.find('div', {'class': 'MAvaNums'})
     # 提取游记的数量
-    travelogue_count = div_for_travelogue.find('strong').get_text(strip=True)
+    try:
+        travelogue_count = div_for_travelogue.find('strong').get_text(strip=True)
+    except:
+        travelogue_count = 0
     # 用于存储已提取的文章编号的集合
     seen_article_ids = set()
     print("游记数量:", travelogue_count)
@@ -30,7 +33,10 @@ def getUserComment(user_id):
         # 提取用户名
         info = html_crawler(f'https://www.mafengwo.cn/u/{user_id}.html')
         info_soup = bs.BeautifulSoup(info, 'html.parser')
-        username = info_soup.find('div', class_='MAvaName').get_text(strip=True)
+        try:
+            username = info_soup.find('div', class_='MAvaName').get_text(strip=True)
+        except:
+            username = None
         # 提取这个用户的信息，比如性别和居住地
         # 提取居住地
         try:
@@ -173,7 +179,6 @@ def getUserComment(user_id):
                         'article_id': id
                     }
                     articles.append(article_info)
-
 
         user_info = {
             'username': username,
