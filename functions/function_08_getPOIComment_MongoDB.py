@@ -24,6 +24,9 @@ def get_POIcomment_DB(cityID, mongo_instance):
     :param mongo_instance: 数据库实例
     :return: 内循环都会返回对应城市中一个景点的评论，外循环是城市
     """
+    if cityID == None:
+        print("cityID不存在，跳过该城市")
+        return
     print(f"正在提取{cityID}的城市数据")
 
     # 根据城市的ID，获取所有POI的路线信息
