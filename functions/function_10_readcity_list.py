@@ -24,5 +24,5 @@ def readcity_list(mongo_instance):
     for document in result:
         city_list.append(document["id"])
         # 返回包含所有 id 的列表
-    print(city_list)
+    # print(city_list) # 打印出来
     return city_list

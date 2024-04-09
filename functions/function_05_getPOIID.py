@@ -45,7 +45,10 @@ def _get_route(mdd_id):
     list_data = response['data']['list']
     page_data = response['data']['page']
     soup_page = BeautifulSoup(page_data, "html.parser")
-    page = int(soup_page.find('span', class_='count').find('span').text)
+    try:
+        page = int(soup_page.find('span', class_='count').find('span').text)
+    except:
+        page = 0
     # 没法突破20页的限制，每个城市最多只能获取300个POI
     for page in range(1, page + 1):
         post_data = _md5({
